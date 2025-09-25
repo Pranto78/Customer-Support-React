@@ -1,8 +1,9 @@
 import React, { use, useState } from "react";
 import { toast } from "react-toastify";
 import TaskStatus from "../TaskStatus/TaskStatus";
+import ResolvedTask from "../ResolvedTask/ResolvedTask";
 
-const TicketCard = ({ customerPromise, setInProgress, inProgress }) => {
+const TicketCard = ({ customerPromise, setInProgress, inProgress,setIsResolved,isResolved}) => {
   const customerData = use(customerPromise);
 
   const [selectedTickets, setSelectedTickets] = useState([]); // array instead of null
@@ -84,13 +85,14 @@ const TicketCard = ({ customerPromise, setInProgress, inProgress }) => {
             <p>Select a ticket to add to Task Status</p>
           ) : (
             selectedTickets.map((ticket) => (
-              <TaskStatus key={ticket.id} selectedTicket={ticket} />
+              <TaskStatus inProgress={inProgress} setInProgress={setInProgress} isResolved={isResolved} setIsResolved={setIsResolved} key={ticket.id} selectedTicket={ticket}></TaskStatus>
             ))
           )}
         </div>
 
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Resolved Task</h2>
+        <div className="space-y-3">
+          <h2 className="text-2xl font-semibold mb-4 mt-3">Resolved Task</h2>
+          <ResolvedTask></ResolvedTask>
           <p>No resolved tasks yet.</p>
         </div>
       </div>
