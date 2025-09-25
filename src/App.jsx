@@ -1,8 +1,10 @@
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import "./App.css";
 import Banner from "./Component/Banner/Banner";
 import Navbar from "./Component/Navbar/Navbar";
 import TicketCard from "./Component/TicketCard/TicketCard";
+import { ToastContainer} from 'react-toastify';
+
 
 const fetchCustomers = async () => {
   const res = await fetch("/Customer.json");
@@ -11,19 +13,23 @@ const fetchCustomers = async () => {
 
 const customerPromise = fetchCustomers();
 
+
+
 function App() {
+  const [inProgress,setInProgress] = useState(0);
   return (
     <>
       <div className="bg-[#f5f5f5]">
         <Navbar></Navbar>
 
-        <Banner></Banner>
+        <Banner inProgress={inProgress}></Banner>
 
         <div className="text-3xl font-bold mb-2 max-w-[1800px] mx-auto">Customer Tickets</div>
         <Suspense fallback={<span className="loading loading-spinner text-error"></span>}>
-          <TicketCard customerPromise={customerPromise}></TicketCard>
+          <TicketCard inProgress={inProgress} setInProgress={setInProgress} customerPromise={customerPromise}></TicketCard>
         </Suspense>
       </div>
+      <ToastContainer/>
     </>
   );
 }

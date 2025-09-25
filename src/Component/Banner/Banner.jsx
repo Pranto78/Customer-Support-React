@@ -1,6 +1,6 @@
 import React from "react";
 
-const Banner = () => {
+const Banner = ({inProgress}) => {
   return (
     <div className="max-w-[1800px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
       {/* In-Progress Card */}
@@ -18,7 +18,7 @@ const Banner = () => {
         {/* Centered Text */}
         <div className="relative z-10 flex h-full flex-col justify-center items-center">
           <p className="text-3xl my-1.5">In-Progress</p>
-          <p className="text-4xl font-bold">0</p>
+          <p className="text-4xl font-bold">{inProgress}</p>
         </div>
       </div>
 

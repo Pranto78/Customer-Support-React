@@ -1,14 +1,30 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
+import { toast } from "react-toastify";
+import TaskStatus from "../TaskStatus/TaskStatus";
 
-const TicketCard = ({ customerPromise }) => {
+const TicketCard = ({ customerPromise, setInProgress, inProgress }) => {
   const customerData = use(customerPromise);
-  console.log(customerData);
+
+  const [selectedTickets, setSelectedTickets] = useState([]); // array instead of null
+
+  const handleCardClick = (customer) => {
+    setInProgress(inProgress + 1);
+    toast("In progress");
+
+    // add ticket without replacing (append)
+    setSelectedTickets((prev) => [...prev, customer]);
+  };
+
   return (
     <div className="max-w-[1800px] mx-auto grid grid-cols-[3fr_1fr] gap-6">
       {/* Left side: tickets */}
       <div className="grid grid-cols-2 gap-6">
         {customerData.map((customer) => (
-          <div key={customer.id} className="card bg-base-100 shadow-sm w-full">
+          <div
+            key={customer.id}
+            onClick={() => handleCardClick(customer)}
+            className="card bg-base-100 shadow-sm w-full cursor-pointer hover:shadow-md transition"
+          >
             <div className="card-body">
               <div className="flex justify-between items-center">
                 <h2 className="card-title">{customer.title}</h2>
@@ -61,10 +77,16 @@ const TicketCard = ({ customerPromise }) => {
       </div>
 
       {/* Right side: Task Status */}
-      <div className="bg-gray-50 shadow-md rounded-lg p-4">
-        <div>
+      <div className="p-4">
+        <div className="space-y-3">
           <h2 className="text-2xl font-semibold mb-4">Task Status</h2>
-          <p>Select a ticket to add to Task Status</p>
+          {selectedTickets.length === 0 ? (
+            <p>Select a ticket to add to Task Status</p>
+          ) : (
+            selectedTickets.map((ticket) => (
+              <TaskStatus key={ticket.id} selectedTicket={ticket} />
+            ))
+          )}
         </div>
 
         <div>
