@@ -3,23 +3,31 @@ import { toast } from "react-toastify";
 import TaskStatus from "../TaskStatus/TaskStatus";
 import ResolvedTask from "../ResolvedTask/ResolvedTask";
 
-const TicketCard = ({ customerPromise, setInProgress, inProgress,setIsResolved,isResolved}) => {
-  const customerData = use(customerPromise);
+const TicketCard = ({
+  customerPromise,
+  setInProgress,
+  inProgress,
+  setIsResolved,
+  isResolved,
+}) => {
+  
+  const initialCustomers = use(customerPromise);
+  const [customerData, setCustomerData] = useState(initialCustomers);
 
-  const [selectedTickets, setSelectedTickets] = useState([]); // array instead of null
+  const [selectedTickets, setSelectedTickets] = useState([]);
+  const [resolvedTickets, setResolvedTickets] = useState([]);
 
   const handleCardClick = (customer) => {
     setInProgress(inProgress + 1);
     toast("In progress");
 
-    // add ticket without replacing (append)
     setSelectedTickets((prev) => [...prev, customer]);
   };
 
   return (
-    <div className="max-w-[1800px] mx-auto grid grid-cols-[3fr_1fr] gap-6">
+    <div className="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6">
       {/* Left side: tickets */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {customerData.map((customer) => (
           <div
             key={customer.id}
@@ -85,15 +93,27 @@ const TicketCard = ({ customerPromise, setInProgress, inProgress,setIsResolved,i
             <p>Select a ticket to add to Task Status</p>
           ) : (
             selectedTickets.map((ticket) => (
-              <TaskStatus inProgress={inProgress} setInProgress={setInProgress} isResolved={isResolved} setIsResolved={setIsResolved} key={ticket.id} selectedTicket={ticket}></TaskStatus>
+              <TaskStatus
+                key={ticket.id}
+                selectedTicket={ticket}
+                setSelectedTickets={setSelectedTickets}
+                resolvedTickets={resolvedTickets}
+                setResolvedTickets={setResolvedTickets}
+                setIsResolved={setIsResolved}
+                isResolved={isResolved}
+                setInProgress={setInProgress}
+                inProgress={inProgress}
+                
+                setCustomerData={setCustomerData}
+              />
             ))
           )}
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           <h2 className="text-2xl font-semibold mb-4 mt-3">Resolved Task</h2>
-          <ResolvedTask></ResolvedTask>
-          <p>No resolved tasks yet.</p>
+          <ResolvedTask resolvedTickets={resolvedTickets}></ResolvedTask>
+          {resolvedTickets.length === 0 && <p>No resolved tasks yet.</p>}
         </div>
       </div>
     </div>
