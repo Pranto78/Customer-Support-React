@@ -4,6 +4,7 @@ import Banner from "./Component/Banner/Banner";
 import Navbar from "./Component/Navbar/Navbar";
 import TicketCard from "./Component/TicketCard/TicketCard";
 import { ToastContainer} from 'react-toastify';
+import Footer from "./Component/Footer/Footer";
 
 
 const fetchCustomers = async () => {
@@ -30,6 +31,7 @@ function App() {
           <TicketCard inProgress={inProgress} setInProgress={setInProgress} customerPromise={customerPromise} isResolved={isResolved} setIsResolved={setIsResolved}></TicketCard>
         </Suspense>
       </div>
+      <Footer></Footer>
       <ToastContainer/>
     </>
   );
